@@ -13,7 +13,7 @@
         @include('posts.form', ['submitButton'=> "ホストを募集する"])
         <input type="hidden" name="user_id" value="{{ Auth::id() }}">
         <input type="hidden" name="completed" value="{{ 1 }}">
-{!! Form::close() !!} <!-- フォームの閉じタグ生成 -->
+{!! Form::close() !!} <!-- フォームの閉じタグ生成 変更てん -->
 
 
 </div>
