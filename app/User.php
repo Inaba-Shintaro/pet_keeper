@@ -65,8 +65,18 @@ class User extends Authenticatable
     //return $this->belongsToMany('App\Pettype');//「pettype_user」テーブルを参照しようとする
     }
 
-    public function groups()//【RELATION】「User belongsToMany Groups」
+    // public function groups()//【RELATION】「User belongsToMany Groups」
+    // {
+    //   return $this->belongsToMany('App\Group','groups');
+    // }
+
+    public function petkeepers()
     {
-      return $this->belongsToMany('App\Group');
+        return $this->belongsToMany(User::class, 'groups', 'pet_holder_id', 'pet_keeper_id');
+    }
+
+    public function petholders()
+    {
+        return $this->belongsToMany(User::class, 'groups', 'pet_keeper_id', 'pet_holder_id');
     }
 }

@@ -119,8 +119,8 @@ class UserController extends Controller
             $user->image=$fileName;    
         }
 
-        if(isset($request->email)){//emailの更新があった場合
-            dd($request->email);
+        if($request->email !== null){//emailの更新があった場合
+            // dd($request->email);
             $user->email = $request->email;    
         }
 

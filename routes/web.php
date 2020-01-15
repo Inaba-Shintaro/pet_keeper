@@ -21,11 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 Route::resource('/', 'UserController')->middleware('auth');
-
-
 
 Auth::routes();
 
@@ -39,3 +35,4 @@ Route::resource('pets', 'PetController')->middleware('auth');
 
 Route::resource('comments', 'CommentController')->middleware('auth');
 
+Route::resource('groups', 'GroupController');

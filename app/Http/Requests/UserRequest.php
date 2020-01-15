@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
     public function rules(Request $request)
     {
         
-        dd($request);
+        // dd($request);
 
         // if($request->email == null){
             if(!isset($request->email_update)){//自己紹介編集時のバリデーション

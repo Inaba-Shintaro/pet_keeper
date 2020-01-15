@@ -38,6 +38,7 @@
                         <li><a href="{{route('index')}}">マイページ</a></li>
                         <li><a href="{{route('posts.create')}}">預ける</a></li>
                         <li><a href="{{route('posts.index')}}">預かる</a></li>
+                        <li><a href="{{route('groups.index')}}">チャットする</a></li>
                     @endguest
                         
                     </ul>

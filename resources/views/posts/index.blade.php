@@ -9,7 +9,7 @@
             @foreach($posts as $post)
                 <div class="col mb-4">
                     <a href="{{ route( 'posts.show',$post->id ,['post'=>$post]) }}">
-                    <div class="card">
+                    <div class="card">                    
                         <img src="{{asset('images/'.$post->user->pets->first()->image)}}" class="card-img-top" alt="#">
                         <div class="card-body">
                             <p class="card-text">いつから：{{$post->term_start}}</p>

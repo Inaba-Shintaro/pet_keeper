@@ -57,12 +57,13 @@ class PostController extends Controller
             $post->completed = $request->completed;
     
         
-        // dd($post);
+        
         $post->save();
 
 
-        $posts = Post::latest()->paginate(8);
-
+        // $posts = Post::latest()->paginate(8);
+        $posts = Post::with('user.pets')->latest()->paginate(8);
+        
         return view('posts.index',["posts"=>$posts]);
 
     }
