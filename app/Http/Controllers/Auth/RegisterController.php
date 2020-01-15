@@ -81,10 +81,14 @@ class RegisterController extends Controller
             'host_experience' => $data['host_experience'],
         ]);
 
+            // dd((array)$data['pettypes']);
+
         foreach( (array)$data['pettypes'] as  $value ){//ペットの種類の名前が入ってる配列の中のペットの種類の名前だけ取り出す
             
             $pettype = Pettype::where('type_name',$value)->first();//pettypesテーブルから入力されたペットの種類の名前で検索
-            
+
+            // dd($pettype->id);
+
              PettypeUser::create([//
                 'user_id' => $user->id,
                 'pettype_id' => $pettype->id,

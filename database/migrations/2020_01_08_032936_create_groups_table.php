@@ -17,11 +17,13 @@ class CreateGroupsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('pet_holder_id')->unsigned()->index();
             $table->bigInteger('pet_keeper_id')->unsigned()->index();
-            $table->string('group_name');
             $table->timestamps();
 
             $table->foreign('pet_holder_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('pet_keeper_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unique(['pet_holder_id', 'pet_keeper_id']);//組み合わせのダブリが起こらない設定 1:2 の組み合わせは1つだけ
+            $table->unique(['pet_holder_id', 'pet_keeper_id']);//組み合わせのダブリが起こらない設定 1:2 の組み合わせは1つだけ
         });
     }
 

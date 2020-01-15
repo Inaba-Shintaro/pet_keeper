@@ -115,6 +115,11 @@
     @endif
     <a class="btn btn-primary" href="{{route('comments.create', ['post' => $post])}}" role="button">コメントする</a>
 
+    <hr>
+    @if($post->user_id == Auth::id())
+    @else
+    <a class="btn btn-primary" href="{{route('groups.create',['pet_holder_id'=>$post->user_id,'pet_keeper_id'=>Auth::id()])}}" role="button">この人とチャットをする</a>
+    @endif
         <input type="hidden" name="user_id" value="{{ $post->id }}">
         <input type="hidden" name="completed" value="{{ 1 }}">
    
