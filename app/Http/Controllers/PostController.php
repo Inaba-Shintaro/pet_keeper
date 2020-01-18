@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;//Auth使うにはこれが必要だった
 
 use App\Http\Requests\PostRequest;
 
+use Carbon\Carbon;
+
 class PostController extends Controller
 {
     /**
@@ -20,9 +22,31 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user.pets')->latest()->paginate(8);
+
+        // $pets = Pet::all();
+        // dd($pets);
         
-        return view('posts.index',['posts'=>$posts]);
+
+        // $pets_a = $pets->all();
+        // $pets = [];
+        // foreach($pets_a as $pet){
+        //     $pets[] = $pet;
+        // }  
+        
+        // $posts = Post::with('user.pets')->latest()->paginate(8);
+        $posts = Post::all();
+
+        
+        $posts->load('pet');
+        // dd($posts->first()->pets); 
+        
+        
+        // foreach(array_map(null,$pets, $posts) as [$pet, $post] ){
+        //     dd($pet);
+        //     dd($post); 
+        // }
+        $posts = Post::with('user')->latest()->paginate(8);
+        return view('posts.index',["posts"=>$posts]);
     }
 
     /**
@@ -32,7 +56,18 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        
+
+        $auth = Auth::user();
+        $user = User::find($auth->id);
+        $user->load('pets');
+        
+        // dd($user);
+        
+        // $pets = User::with('pets');
+        
+
+        return view('posts.create',['user'=>$user]);
     }
 
     /**
@@ -45,24 +80,24 @@ class PostController extends Controller
     {
 
         // dd($request);
-        
-
             $post = new Post;//さらのPostレコードを作成
 
             $post->user_id = $request->user_id;
+            $post->pet_id = $request->pet_id;
             $post->term_start = $request->term_start;
-            $post->term_end = $request->term_end;
+            $post->term_end =  $request->term_end;
             $post->price = $request->price;
             $post->content = $request->content;
             $post->completed = $request->completed;
     
-        
-        
         $post->save();
 
 
         // $posts = Post::latest()->paginate(8);
-        $posts = Post::with('user.pets')->latest()->paginate(8);
+        $posts = Post::with('user')->latest()->paginate(8);
+        $posts->load('pet');
+        // dd($posts->first());
+        // dd($posts);
         
         return view('posts.index',["posts"=>$posts]);
 
@@ -81,11 +116,13 @@ class PostController extends Controller
 
         $post->load('user');//postモデルのrelationをもとに、relationされているレコードの値も一緒にview渡すため
         
-        $post->user->load('pets');
+        $pet = Pet::find($post->pet_id);
+        $pet->load('pettype');
+        $post->comments->load('user');
+        // dd($post->comments->load('user'));
+        // dd($post->comments->user);
         
-        $post->user->pets->load('pettype');
-        
-        return view('posts.show',['post'=>$post,'auth'=>$auth]);
+        return view('posts.show',['post'=>$post,'auth'=>$auth,'pet'=>$pet]);
     }
 
     /**
@@ -96,7 +133,13 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit',['post'=>$post]);
+        
+        $auth = Auth::user();
+        
+        $user = User::find($auth->id);
+        $user->load('pets');
+
+        return view('posts.edit',['post'=>$post,'user'=>$user]);
     }
 
     /**
@@ -109,8 +152,9 @@ class PostController extends Controller
     public function update(Request $request,Post $post)
     {
         
+        $post->pet_id = $request->pet_id;
         $post->term_start = $request->term_start;
-        $post->term_end = $request->term_end;
+        $post->term_end =  $request->term_end;
         $post->price = $request->price;
         $post->content = $request->content;
         $post->completed = $request->completed;
@@ -118,8 +162,16 @@ class PostController extends Controller
         $post->save();
         
         $auth = Auth::user();
+        
+        $pet = Pet::find($post->pet_id);
+        $pet->load('pettype');
+        $post->comments->load('user');
+        // dd($post->comments->load('user'));
+        // dd($post->comments->user);
+        
+        return view('posts.show',['post'=>$post,'auth'=>$auth,'pet'=>$pet]);
 
-        return view('posts.show',['post'=>$post,'auth'=>$auth]);
+        // return view('posts.show',['post'=>$post,'auth'=>$auth]);
     
     }
 
@@ -131,8 +183,19 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        
         $post->delete();
 
-        return redirect('/posts');
+        $posts = Post::all();
+
+        $posts = Post::with('user')->latest()->paginate(8);
+        $posts->load('pet');
+        // dd($posts->first());
+        // dd($posts);
+        
+        return view('posts.index',["posts"=>$posts]);
+
+        // return view('post.index')
+        // return redirect('/posts');
     }
 }

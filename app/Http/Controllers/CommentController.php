@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 
 use App\Post;
+use App\Pet;
 use App\Comment;
 
 use Illuminate\Support\Facades\Auth;//Auth使うにはこれが必要だった
@@ -54,13 +55,18 @@ class CommentController extends Controller
 
         $comment->save();
 
-        $post =Post::find($request->post_id)->load('comments');
+        $post =Post::find($request->post_id)
+                    ->load('comments')
+                    ->load('user');
                     
         // dd($post->comments);
 
         $auth = Auth::user();
         
-        return view('posts.show',['post'=>$post,'auth'=>$auth]);
+        $pet = Pet::find($post->pet_id);
+        $pet->load('pettype');
+        
+        return view('posts.show',['post'=>$post,'auth'=>$auth,'pet'=>$pet]);
 
     }
 

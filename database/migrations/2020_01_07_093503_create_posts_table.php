@@ -16,6 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned()->index();
+            $table->bigInteger('pet_id')->unsigned()->index();
             $table->timestamp('term_start')->nullable();
             $table->timestamp('term_end')->nullable();
             $table->integer('price');
@@ -24,6 +25,7 @@ class CreatePostsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('pet_id')->references('id')->on('pets')->onDelete('cascade');
         });
     }
 

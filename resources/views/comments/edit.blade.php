@@ -19,7 +19,7 @@
 <form action="{{route('comments.destroy',$comment->id)}}" method="POST">
 {{ csrf_field() }}
 {{ method_field('DELETE') }}
-  <button type="submit" class="btn btn-primary">コメントを削除する</button>
+  <button type="submit" class="btn btn-danger">コメントを削除する</button>
 </form>
 
 

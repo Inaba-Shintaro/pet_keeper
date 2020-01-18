@@ -8,6 +8,7 @@ use App\User;
 use App\Pet;
 use App\Pettype;
 use App\PettypeUser;
+use App\Http\Controllers\Requset;
 
 use App\Http\Requests\UserRequest;
 
@@ -28,13 +29,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $auth = Auth::user();
-        $auth->load('pets');
-        $pet = $auth->pets->first();
+        // $auth = Auth::user();
+        $user = User::find(Auth::id());
+        $user->load('pets');
+        $pet = $user->pets;
 
-
-        // dd($auth->pets);
-        return view('users.index',['auth'=>$auth,'pet'=>$pet]);   
+        return view('users.index',['user'=>$user,'pet'=>$pet]);   
     }
 
     /**
@@ -66,7 +66,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        
+        $user = User::find($id);
+
+        $user->load('pets');
+        $pet = $user->pets;
+
+        return view('users.index',['user'=>$user,'pet'=>$pet]);
     }
 
     /**
@@ -78,15 +84,42 @@ class UserController extends Controller
     public function edit($id)
     {
         $auth = Auth::user();
-
+        
         $pettypes = $auth->pettypes;
-
+        
         $pettype_names = [];
+
         foreach($pettypes as $pettype){
             $pettype_names[] = $pettype->type_name;
         }
         
         return view('users.edit',['auth'=>$auth,'pettype_names'=>$pettype_names]);
+    }
+    
+    public function confirm(UserRequest $request)
+    {   
+
+        $auth = Auth::user();
+
+        $pettypes = $auth->pettypes;
+        
+        $pettype_names = [];
+
+        foreach($pettypes as $pettype){
+            $pettype_names[] = $pettype->type_name;
+        }
+
+        // dd($request);
+        //画像は先に保存
+        $user = User::find($auth->id);
+        $file=$request->file('image');       
+        $fileName=Str::random(20).'.'.$file->getClientOriginalExtension();
+        Image::make($file)->resize(300, 200)->save(public_path('images/'.$fileName));
+        $auth->image=$fileName;
+        $user->image=$fileName;
+        // dd($user);
+
+        return view('users.confirm',['auth'=>$auth,'pettype_names'=>$pettype_names,'request'=>$request]);
     }
 
     /**
@@ -98,41 +131,39 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
+     
+        if(!isset($request->email_update)){
 
-        $pettype_user_ids = PettypeUser::where('user_id',$user->id)->delete();//一度ペットとユーザーの中間テーブルのレコードを削除する
+                $pettype_user_ids = PettypeUser::where('user_id',$user->id)->delete();//一度ペットとユーザーの中間テーブルのレコードを削除する
 
-            foreach( $request->pettypes as  $value ){//ペットの種類の名前が入ってる配列の中のペットの種類の名前だけ取り出す
-            
-            $pettype = Pettype::where('type_name',$value)->first();//pettypesテーブルから入力されたペットの種類の名前で検索
-            
-             PettypeUser::create([//新しく中間テーブルを作り直す
-                'user_id' => $user->id,
-                'pettype_id' => $pettype->id,
-                ]);
+                foreach( $request->pettypes as  $value ){//ペットの種類の名前が入ってる配列の中のペットの種類の名前だけ取り出す
+                
+                $pettype = Pettype::where('type_name',$value)->first();//pettypesテーブルから入力されたペットの種類の名前で検索
+                
+                PettypeUser::create([//新しく中間テーブルを作り直す
+                    'user_id' => $user->id,
+                    'pettype_id' => $pettype->id,
+                    ]);
+            }
+
+            // dd($request);
+            // if(isset($request->image)){//画像の更新があった場合
+            //     // dd($request->image);
+            //     $file=$request->file('image');
+            //     $fileName=Str::random(20).'.'.$file->getClientOriginalExtension();
+            //     Image::make($file)->resize(300, 200)->save(public_path('images/'.$fileName));
+            //     $user->image=$fileName;    
+            // }
+
+            $user->name = $request->name;
+            $user->host_experience = $request->host_experience;
+            $user->area = $request->area;
+            $user->comment = $request->comment;
+
+        } else {
+            $user->email = $request->email; 
         }
-
-        if(isset($request->image)){//画像の更新があった場合
-            // dd($request->image);
-            $file=$request->file('image');
-            $fileName=Str::random(20).'.'.$file->getClientOriginalExtension();
-            Image::make($file)->resize(300, 200)->save(public_path('images/'.$fileName));
-            $user->image=$fileName;    
-        }
-
-        if($request->email !== null){//emailの更新があった場合
-            // dd($request->email);
-            $user->email = $request->email;    
-        }
-
-
-    
-        $user->name = $request->name;
-        $user->host_experience = $request->host_experience;
-        $user->area = $request->area;
-        $user->comment = $request->comment;
-
         $user->save();
-        // dd($user);
 
         $auth = Auth::user();
 
@@ -144,11 +175,14 @@ class UserController extends Controller
         }
 
         $update = 1;
-
-        return redirect('/');
-        // return route('index');
-        // return redirect('/',$update);
         
+        $user = User::find(Auth::id());
+        $user->load('pets');
+        $pet = $user->pets;
+
+        return view('users.index',['user'=>$user,'pet'=>$pet]); 
+        // return view('/');
+        // return redirect('/');
     }
 
     /**

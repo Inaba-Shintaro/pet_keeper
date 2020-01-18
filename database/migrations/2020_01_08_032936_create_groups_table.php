@@ -23,7 +23,7 @@ class CreateGroupsTable extends Migration
             $table->foreign('pet_keeper_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unique(['pet_holder_id', 'pet_keeper_id']);//組み合わせのダブリが起こらない設定 1:2 の組み合わせは1つだけ
-            $table->unique(['pet_holder_id', 'pet_keeper_id']);//組み合わせのダブリが起こらない設定 1:2 の組み合わせは1つだけ
+            $table->unique(['pet_keeper_id', 'pet_holder_id']);//組み合わせのダブリが起こらない設定 1:2 の組み合わせは1つだけ
         });
     }
 

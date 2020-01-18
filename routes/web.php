@@ -17,10 +17,12 @@ Route::get('users/account_edit', 'UserController@account_edit')->middleware('aut
 
 Route::get('users/account_delete', 'UserController@account_delete')->middleware('auth')->name('users.account_delete');
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::patch('users/{user}/confirm', 'UserController@confirm')->middleware('auth')->name('users.confirm');
 Route::resource('/', 'UserController')->middleware('auth');
 
 Auth::routes();

@@ -7,9 +7,12 @@
 
 @include('errors.form_errors')
 
-{!! Form::open(['method' => 'PATCH','route' => ['users.update', $auth->id],'files' => true]) !!} <!-- routenameとidをpatchで渡してあげる -->
+{!! Form::open(['method' => 'PATCH','route' => ['users.confirm',$auth->id],'files' => true]) !!} <!-- routenameとidをpatchで渡してあげる -->
+<form action="{{route('users.confirm',$auth->id)}}" method="POST"enctype="multipart/form-data">
+@method('PATCH')
+@csrf
     <!-- 【Partial】petsディレクトリ配下のform.blade.phpファイルの読み込み -->
-        @include('users.form', ['autn'=>$auth,'pettype_names'=>$pettype_names,'submitButton'=> "上書き保存する"])
+        @include('users.form', ['submitButton'=> "テスト"])
         <input type="hidden" name="user_id" value="{{ Auth::id() }}">
 {!! Form::close() !!} <!-- フォームの閉じタグ生成 -->
 

@@ -25,6 +25,7 @@ class PostRequest extends FormRequest
     {
         return [//vaildateのルールを記載
             'user_id' => 'required|numeric',//数字、必須項目
+            'pet_id' => 'required|numeric',//数字、必須項目
             'term_start' => 'required|date',//必須項目　data型じゃなきゃダメ 
             'term_end' => 'required|date',//必須項目　data型じゃなきゃダメ 
             'price' => 'required|numeric',//数字、必須項目

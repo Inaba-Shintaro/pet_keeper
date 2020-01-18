@@ -17,4 +17,8 @@ class Pet extends Model
     public function pettype() {//【RELATION】「Pets belongsTo Pettype」
         return $this->belongsTo('App\Pettype');
     }
+
+    public function pets() {//【RELATION】「Post hasMany Pets」
+        return $this->hasMany('App\Pet');
+    }
 }

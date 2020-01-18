@@ -94,6 +94,7 @@ class RegisterController extends Controller
                 'pettype_id' => $pettype->id,
                 ]);
         }
+        // return route('index');//これでマイページに遷移する
         return $user;//これでマイページに遷移する
     }
 }

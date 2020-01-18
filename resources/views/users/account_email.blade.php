@@ -15,6 +15,7 @@
         <input name="email" value="{{$auth->email}}" type="email" class="form-control" id="exampleInputEmail1">
     </div>
     <input name="email_update" value="{{$auth->email}}" type="hidden" class="form-control" id="exampleInputEmail1">
+    <input type="hidden" name="user_id" value="{{ Auth::id() }}">
     <button type="submit" class="btn btn-primary">メールアドレスを変更する</button>
 </form>
 

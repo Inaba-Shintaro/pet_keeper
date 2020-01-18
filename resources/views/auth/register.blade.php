@@ -8,9 +8,8 @@
                 <div class="card-header">{{ __('新規登録') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form id="registerForm" method="POST" action="{{ route('register') }}">
                         @csrf
-
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('名前') }}</label>
@@ -42,16 +41,16 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="exampleFormControlSelect1">ペット歴</label>
+                            <label class="col-md-4 col-form-label text-md-right" for="host_experience">ペット歴</label>
                             <div class="col-md-6">
-                                <select name="host_experience" class="form-control col-5  @error('exampleFormControlSelect1') is-invalid @enderror" id="exampleFormControlSelect1" value="{{ old('exampleFormControlSelect1') }}" required autocomplete="exampleFormControlSelect1">
-                                    <option selected></option>
+                                <select name="host_experience" class="form-control col-5  @error('host_experience') is-invalid @enderror" id="host_experience" value="{{ old('host_experience') }}" required autocomplete="host_experience">
+                                    <option name="host_experience" selected ></option>
                                     <option name="host_experience">1年未満</option>
                                     <option name="host_experience">1~5年</option>
                                     <option name="host_experience">5~10年</option>
                                     <option name="host_experience">10年以上</option>
                                 </select>
-                                @error('exampleFormControlSelect1')
+                                @error('host_experience')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -64,16 +63,16 @@
                             <label class="col-md-4 col-form-label text-md-right" for="checkbox">預かり可能なペットの種類</label>
                             <div class="col-md-6 ml-3">
                                 <div class="ml-4 mt-1 d-inline-block">
-                                        <input value="小型犬" name="pettypes[]" multiple="multiple" type="checkbox" class="form-check-input  @error('checkbox') is-invalid @enderror" id="exampleCheck1">
-                                        <label  class="form-check-label" for="exampleCheck1">小型犬</label>
+                                        <input value="小型犬" name="pettypes" multiple="multiple" type="checkbox" class="form-check-input  @error('checkbox') is-invalid @enderror" id="pettypes">
+                                        <label  class="form-check-label validate[maxCheckbox[1]]" for="pettypes">小型犬</label>
                                 </div>
                                 <div class="ml-4 mt-1 d-inline-block">
-                                        <input value="大型犬" name="pettypes[]" multiple="multiple" type="checkbox" class="form-check-input  @error('checkbox') is-invalid @enderror" id="exampleCheck1">
-                                        <label  class="form-check-label" for="exampleCheck1">大型犬</label>
+                                        <input value="大型犬" name="pettypes" multiple="multiple" type="checkbox" class="form-check-input  @error('checkbox') is-invalid @enderror" id="pettypes">
+                                        <label  class="form-check-label validate[maxCheckbox[1]]" for="pettypes">大型犬</label>
                                 </div>
                                 <div class="ml-4 mt-1 d-inline-block">
-                                        <input value="小鳥" name="pettypes[]" multiple="multiple" type="checkbox" class="form-check-input  @error('checkbox') is-invalid @enderror" id="exampleCheck1">
-                                        <label  class="form-check-label" for="exampleCheck1">小鳥</label>
+                                        <input value="小鳥" name="pettypes" multiple="multiple" type="checkbox" class="form-check-input  @error('checkbox') is-invalid @enderror" id="pettypes">
+                                        <label  class="form-check-label validate[maxCheckbox[1]]" for="pettypes">小鳥</label>
                                 </div>
                                 @error('checkbox')
                                     <span class="invalid-feedback" role="alert">

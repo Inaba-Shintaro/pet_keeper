@@ -41,6 +41,7 @@ class PetController extends Controller
     {
         $pettypes = Pettype::all();
 
+
         return view('pets.create',['pettypes'=>$pettypes]);
     }
 
@@ -52,7 +53,6 @@ class PetController extends Controller
      */
     public function store(PetRequest $request)
     {
-
         $pet = new Pet;//さらのPostレコードを作成
 
         $pet->user_id = $request->user_id;
@@ -72,13 +72,23 @@ class PetController extends Controller
 
         $auth = Auth::user();//ログイン中のユーザーをマイページに渡す
 
-        $pet = Pet::all();//ペットの全レコードを取得
+        // $pet = Pet::all();//ペットの全レコードを取得
         
-        $pet->load('user','pettype');//petモデルのrelationをもとに、relationされているレコードの値も一緒にview渡すため
+        // $pet->load('user','pettype');//petモデルのrelationをもとに、relationされているレコードの値も一緒にview渡すため
         
-        $pet = Pet::where('user_id',$auth->id)->first();//ペットレコードからログイン中のユーザーのペットをマイページに渡す
+        // $pet = Pet::where('user_id',$auth->id)->get();//ペットレコードからログイン中のユーザーのペットをマイページに渡す
+        
+        // // $pet = Pet::where('user_id',$auth->id)->get();//ペットレコードからログイン中のユーザーのペットをマイページに渡す
 
-        return view('users.index',['pet'=>$pet,'auth'=>$auth]);
+        
+        
+        // return view('users.index',['pet'=>$pet,'auth'=>$auth]);
+
+        
+        $user = User::find($auth->id);
+        $user->load('pets');
+        $pet = $user->pets;
+        return view('users.index',['user'=>$user,'pet'=>$pet]);   
     }
 
     /**
@@ -139,15 +149,26 @@ class PetController extends Controller
         $pet->save();
         // dd($user);
 
-        $auth = Auth::user();//ログイン中のユーザーをマイページに渡す
+        // $auth = Auth::user();//ログイン中のユーザーをマイページに渡す
 
-        $pet = Pet::all();//ペットの全レコードを取得
-        
-        $pet->load('user','pettype');//petモデルのrelationをもとに、relationされているレコードの値も一緒にview渡すため
-        
-        $pet = Pet::where('user_id',$auth->id)->first();//ペットレコードからログイン中のユーザーのペットをマイページに渡す
+        // $auth->load('pets');
+        // $pet = $auth->pets;
 
-        return view('users.index',['pet'=>$pet,'auth'=>$auth]);
+        // $pet = Pet::all();//ペットの全レコードを取得
+        
+        // $pet->load('user','pettype');//petモデルのrelationをもとに、relationされているレコードの値も一緒にview渡すため
+        
+        // $pet = Pet::where('user_id',$auth->id)->first();//ペットレコードからログイン中のユーザーのペットをマイページに渡す
+
+        // return route('index');
+        // return view('users.index',['pet'=>$pet,'auth'=>$auth]);
+        // return view('users.index',['auth'=>$auth,'pet'=>$pet]);
+
+        $user = User::find(Auth::id());
+        $user->load('pets');
+        $pet = $user->pets;
+
+        return view('users.index',['user'=>$user,'pet'=>$pet]); 
 
         // return redirect('/');
         // return view('users.index',['pet'=>$pet,'auth'=>$auth]);

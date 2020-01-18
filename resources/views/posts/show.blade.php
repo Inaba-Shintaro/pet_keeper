@@ -9,12 +9,12 @@
 
     <div class="form-group row mt-5">
         <label class="col-4">お預け開始日</label>
-        <p class="form-control col-3">{{$post->term_start}}</p>
+        <p class="form-control col-3">{{date('Y年m月d日',strtotime($post->term_start))}}</p>
     </div>
 
     <div class="form-group row mt-5">
         <label class="col-4">お預け終了日</label>
-        <p class="form-control col-3">{{$post->term_end}}</p>
+        <p class="form-control col-3">{{date('Y年m月d日',strtotime($post->term_end))}}</p>
     </div>
 
     <div class="form-group row mt-5">
@@ -63,18 +63,20 @@
 
     <div class="form-group row mt-5">
         <label class="col-4">ペットの名前</label>
-        <p class="form-control col-3">{{$post->user->pets->first()->name}}</p>
-        <div class="col-3"><img src="{{asset('images/'.$post->user->pets->first()->image)}}" alt="エラー発生中"></div>
+        <p class="form-control col-3">{{$pet->name}}</p>
+        <div class="col-3"><img src="{{asset('images/'.$pet->image)}}" alt="エラー発生中"></div>
     </div>
 
     <div class="form-group row mt-5">
         <label class="col-4">種類</label>
-        <p class="form-control col-3">{{$post->user->pets->first()->pettype->type_name}}</p>
+        
+        <p class="form-control col-3">{{$pet->pettype->type_name}}</p>
     </div>
 
     <div class="form-group row mt-5">
         <label class="col-4">種類</label>
-        @if($post->user->pets->first()->gender == 1)
+        
+        @if($pet->gender == 1)
             <p class="form-control col-3">オス</p>
         @else
             <p class="form-control col-3">メス</p>
@@ -85,7 +87,8 @@
         <div class="col-9 bg-info">
             <div class="form-group h-100">
                 <label for="exampleFormControlTextarea1">ホストへのお願い留意事項など</label>
-                <p class="bg-white h-100">{{$post->user->pets->first()->characteristic}}</p>
+        
+                <p class="bg-white h-100">{{$pet->characteristic}}</p>
             </div>
         </div>
     </div>
@@ -103,11 +106,17 @@
         <div class="col-9 bg-info">
             <div class="form-group">
                 @foreach($post->comments as $comment)
-                    @if(Auth::id() == $comment->user_id)
+                @if(isset($comment->user->image))
+                <img src="{{asset('images/'.$comment->user->image)}}" alt="">
+                @else
+                <img src="{{asset('images/no-image.png')}}" alt="">
+                @endif
+                <a href="{{route('users.show',$comment->user->id,['user_id'=>$comment->user->id])}}"><p class="bg-white">{{$comment->user->name}}:のコメント</p></a>
+                <p class="bg-white">{{$comment->comment}}</p>
+                @if(Auth::id() == $comment->user_id)
                         <a class="btn btn-primary" href="{{route('comments.edit',$comment->id)}}" role="button">編集する</a>
                     @else
                     @endif
-                <p class="bg-white">{{$comment->comment}}</p>
                 @endforeach
             </div>
         </div>

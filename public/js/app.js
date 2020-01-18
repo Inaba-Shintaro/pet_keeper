@@ -49443,6 +49443,30 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/app.js":
+/*!************************************!*\
+  !*** ./resources/assets/js/app.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ./sample */ "./resources/assets/js/sample.js");
+
+/***/ }),
+
+/***/ "./resources/assets/js/sample.js":
+/*!***************************************!*\
+  !*** ./resources/assets/js/sample.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+jQuery(document).ready(function () {
+  jQuery("#registerForm").validationEngine();
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -49607,13 +49631,14 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
+/*!******************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/assets/js/app.js ./resources/sass/app.scss ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /Users/inaba/Desktop/www/pet_keeper/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/inaba/Desktop/www/pet_keeper/resources/assets/js/app.js */"./resources/assets/js/app.js");
 module.exports = __webpack_require__(/*! /Users/inaba/Desktop/www/pet_keeper/resources/sass/app.scss */"./resources/sass/app.scss");
 
 

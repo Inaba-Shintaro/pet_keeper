@@ -14,6 +14,10 @@ class Post extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function pet() {//【RELATION】「Posts belongsTo Pet」
+        return $this->belongsTo('App\Pet');
+    }
+
     public function comments() {//【RELATION】「Post hasMany Comments」
         return $this->hasMany('App\Comment');
     }
